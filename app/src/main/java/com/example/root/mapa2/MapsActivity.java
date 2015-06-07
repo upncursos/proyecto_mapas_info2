@@ -1,14 +1,19 @@
 package com.example.root.mapa2;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
-public class MapsActivity extends FragmentActivity {
+// Se debe implementar GoogleMap.OnMapClickListener 
+public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -51,6 +56,16 @@ public class MapsActivity extends FragmentActivity {
                 setUpMap();
             }
         }
+        mMap.setOnMapClickListener(this);   // Establece como procesador de los eventos Click del mapa a esta clase
+        // DIBUJO DE UN POLIGONO
+        PolygonOptions rectOptions = new PolygonOptions();
+        rectOptions.add(new LatLng(4.668770413418966,-74.1090739890933),
+                new LatLng(4.669220865870756,-74.10851005464792),
+                new LatLng(4.668994303026845,-74.108298830688),
+                new LatLng(4.668488045080269,-74.10874508321285)
+        );
+        rectOptions.fillColor(Color.BLUE);
+        Polygon polygon = mMap.addPolygon(rectOptions);
     }
 
     /**
@@ -61,5 +76,10 @@ public class MapsActivity extends FragmentActivity {
      */
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Log.v("datos ", "datos " + latLng);
     }
 }
