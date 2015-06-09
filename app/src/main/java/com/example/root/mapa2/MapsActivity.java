@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -81,5 +82,9 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     @Override
     public void onMapClick(LatLng latLng) {
         Log.v("datos ", "datos " + latLng);
+    }
+
+    public void clic(View view) {
+        Log.v("boton","boton presionado");
     }
 }
