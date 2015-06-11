@@ -1,10 +1,17 @@
 package com.example.root.mapa2;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -13,15 +20,21 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 // Se debe implementar GoogleMap.OnMapClickListener 
-public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener{
+public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener,LocationListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private LocationManager locationManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(5000);
+        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
@@ -55,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
             if (mMap != null) {
                 setUpMap();
             }
+            mMap.setMyLocationEnabled(true);
         }
         mMap.setOnMapClickListener(this);   // Establece como procesador de los eventos Click del mapa a esta clase
         // DIBUJO DE UN POLIGONO
@@ -81,5 +95,28 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     @Override
     public void onMapClick(LatLng latLng) {
         Log.v("datos ", "datos " + latLng);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+        mMap.animateCamera(cameraUpdate);
+      //  locationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }
