@@ -5,24 +5,38 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 // Se debe implementar GoogleMap.OnMapClickListener 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener{
-
+    AutoCompleteTextView textView;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private MarkerOptions texto1;
+    private Marker texto1=null;
+
+    private static final String[] DATOS = new String[] {
+            "b222", "sala cad", "cidup", "b125", "biblioteca"
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, DATOS);
+        textView = (AutoCompleteTextView)
+                findViewById(R.id.autocompletar);
+        textView.setAdapter(adapter);
     }
 
     @Override
@@ -67,7 +81,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-       // mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        // mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setOnMapClickListener(this);   // Establece como procesador de los eventos Click del mapa a esta clase
         // DIBUJO DE UN POLIGONO
         PolygonOptions rectOptions = new PolygonOptions();
@@ -78,10 +92,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         );
         rectOptions.fillColor(Color.BLUE);
         Polygon polygon = mMap.addPolygon(rectOptions);
-        this.texto1 = new MarkerOptions();
-        this.texto1.position(new LatLng(0, 0));
-        this.texto1.title("Aquí");
-       
+
+
 
     }
 
@@ -91,8 +103,17 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     }
 
     public void clic(View view) {
+        if(texto1!=null){
+            texto1.remove();
+        }
         Log.v("boton", "boton presionado");
-        mMap.addMarker(texto1);
+        MarkerOptions mo = new MarkerOptions();
+        mo.position(new LatLng(0, 0));
+        mo.title("Aquí");
+
+        texto1=mMap.addMarker(mo);
+
+
 
     }
 }
