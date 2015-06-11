@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
+    private MarkerOptions texto1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,16 +57,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                 setUpMap();
             }
         }
-        mMap.setOnMapClickListener(this);   // Establece como procesador de los eventos Click del mapa a esta clase
-        // DIBUJO DE UN POLIGONO
-        PolygonOptions rectOptions = new PolygonOptions();
-        rectOptions.add(new LatLng(4.668770413418966,-74.1090739890933),
-                new LatLng(4.669220865870756,-74.10851005464792),
-                new LatLng(4.668994303026845,-74.108298830688),
-                new LatLng(4.668488045080269,-74.10874508321285)
-        );
-        rectOptions.fillColor(Color.BLUE);
-        Polygon polygon = mMap.addPolygon(rectOptions);
+
     }
 
     /**
@@ -76,7 +67,22 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+       // mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap.setOnMapClickListener(this);   // Establece como procesador de los eventos Click del mapa a esta clase
+        // DIBUJO DE UN POLIGONO
+        PolygonOptions rectOptions = new PolygonOptions();
+        rectOptions.add(new LatLng(4.668770413418966, -74.1090739890933),
+                new LatLng(4.669220865870756, -74.10851005464792),
+                new LatLng(4.668994303026845, -74.108298830688),
+                new LatLng(4.668488045080269, -74.10874508321285)
+        );
+        rectOptions.fillColor(Color.BLUE);
+        Polygon polygon = mMap.addPolygon(rectOptions);
+        this.texto1 = new MarkerOptions();
+        this.texto1.position(new LatLng(0, 0));
+        this.texto1.title("Aquí");
+       
+
     }
 
     @Override
@@ -85,6 +91,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     }
 
     public void clic(View view) {
-        Log.v("boton","boton presionado");
+        Log.v("boton", "boton presionado");
+        mMap.addMarker(texto1);
+
     }
 }
